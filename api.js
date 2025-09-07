@@ -67,3 +67,67 @@ export function uploadImage({ file }) {
     return response.json();
   });
 }
+
+export const addPost = ({ description, imageUrl, token }) => {
+  return fetch(postsHost, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+    body: JSON.stringify({
+      description,
+      imageUrl,
+    }),
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error("Ошибка добавления поста");
+    }
+    return response.json();
+  });
+};
+
+export const likePost = ({ postId, token }) => {
+  return fetch(`${postsHost}/${postId}/like`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error("Ошибка лайка");
+    }
+    return response.json();
+  });
+};
+
+export const dislikePost = ({ postId, token }) => {
+  return fetch(`${postsHost}/${postId}/dislike`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error("Ошибка дизлайка");
+    }
+    return response.json();
+  });
+};
+
+export const getUserPosts = ({ userId, token }) => {
+  return fetch(`${postsHost}/user-posts/${userId}`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  })
+    .then((response) => {
+      if (response.status === 401) {
+        throw new Error("Нет авторизации");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data.posts;
+    });
+};

@@ -1,5 +1,6 @@
-import { uploadImage } from "../api.js";
+import {uploadImage} from "../api.js";
 
+// noinspection JSCommentMatchesSignature
 /**
  * Компонент загрузки изображения.
  * Этот компонент позволяет пользователю загружать изображение и отображать его превью.
@@ -59,7 +60,7 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
         // Загружаем изображение с помощью API
         uploadImage({ file }).then(({ fileUrl }) => {
           imageUrl = fileUrl; // Сохраняем URL загруженного изображения
-          onImageUrlChange(imageUrl); // Уведомляем о изменении URL изображения
+          onImageUrlChange(imageUrl); // Уведомляем об изменении URL изображения
           render(); // Перерисовываем компонент с новым состоянием
         });
       }

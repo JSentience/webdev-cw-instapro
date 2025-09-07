@@ -1,7 +1,10 @@
-import { loginUser, registerUser } from "../api.js";
-import { renderHeaderComponent } from "./header-component.js";
-import { renderUploadImageComponent } from "./upload-image-component.js";
+// noinspection D
 
+import {loginUser, registerUser} from "../api.js";
+import {renderHeaderComponent} from "./header-component.js";
+import {renderUploadImageComponent} from "./upload-image-component.js";
+
+// noinspection JSCommentMatchesSignature
 /**
  * Компонент страницы авторизации.
  * Этот компонент предоставляет пользователю интерфейс для входа в систему или регистрации.
@@ -31,6 +34,7 @@ export function renderAuthPageComponent({ appEl, setUser }) {
    * В зависимости от значения `isLoginMode` отображает соответствующий интерфейс.
    */
   const renderForm = () => {
+    // noinspection UnnecessaryLocalVariableJS
     const appHtml = `
       <div class="page-container">
           <div class="header-container"></div>
