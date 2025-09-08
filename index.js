@@ -1,26 +1,27 @@
 // noinspection D
 
-import { getPosts } from "./api.js"
+import {getPosts} from "./api.js"
 import {
-	renderAddPostPageComponent
+  renderAddPostPageComponent
 } from "./components/add-post-page-component.js"
-import { renderAuthPageComponent } from "./components/auth-page-component.js"
+import {renderAuthPageComponent} from "./components/auth-page-component.js"
 import {
-	renderLoadingPageComponent
+  renderLoadingPageComponent
 } from "./components/loading-page-component.js"
-import { renderPostsPageComponent } from "./components/posts-page-component.js"
+import {renderPostsPageComponent} from "./components/posts-page-component.js"
 import {
-	getUserFromLocalStorage,
-	removeUserFromLocalStorage,
-	saveUserToLocalStorage,
+  getUserFromLocalStorage,
+  removeUserFromLocalStorage,
+  saveUserToLocalStorage,
 } from "./helpers.js"
 import {
-	ADD_POSTS_PAGE,
-	AUTH_PAGE,
-	LOADING_PAGE,
-	POSTS_PAGE,
-	USER_POSTS_PAGE,
+  ADD_POSTS_PAGE,
+  AUTH_PAGE,
+  LOADING_PAGE,
+  POSTS_PAGE,
+  USER_POSTS_PAGE,
 } from "./routes.js"
+import {renderHeaderComponent} from "./components/header-component.js";
 
 export let user = getUserFromLocalStorage();
 export let page = null;
@@ -92,15 +93,16 @@ export const goToPage = (newPage, data) => {
 const renderApp = () => {
   const appEl = document.getElementById("app");
   if (page === LOADING_PAGE) {
-    return renderLoadingPageComponent({
+    renderLoadingPageComponent({
       appEl,
       user,
       goToPage,
     });
+    
   }
 
   if (page === AUTH_PAGE) {
-    return renderAuthPageComponent({
+     renderAuthPageComponent({
       appEl,
       setUser: (newUser) => {
         user = newUser;
@@ -113,7 +115,7 @@ const renderApp = () => {
   }
 
   if (page === ADD_POSTS_PAGE) {
-    return renderAddPostPageComponent({
+     renderAddPostPageComponent({
       appEl,
       onAddPostClick({ description, imageUrl }) {
         // @TODO: реализовать добавление поста в API
@@ -124,15 +126,23 @@ const renderApp = () => {
   }
 
   if (page === POSTS_PAGE) {
-    return renderPostsPageComponent({
+     renderPostsPageComponent({
       appEl,
     });
   }
 
   if (page === USER_POSTS_PAGE) {
     // @TODO: реализовать страницу с фотографиями отдельного пользователя
-    appEl.innerHTML = "Здесь будет страница фотографий пользователя";
-    return;
+    appEl.innerHTML = `
+      <div class="page-container">
+        <div class="header-container"></div>
+        <p>Здесь будет страница фотографий пользователя</p>
+      </div>
+    `;
+  }
+  const headerContainer = document.querySelector(".header-container");
+  if (headerContainer) {
+    renderHeaderComponent({ element: headerContainer });
   }
 };
 

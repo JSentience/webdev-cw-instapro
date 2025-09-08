@@ -58,9 +58,7 @@ export function renderPostsPageComponent({ appEl }) {
 
   appEl.innerHTML = appHtml;
 
-  renderHeaderComponent({
-    element: document.querySelector(".header-container"),
-  });
+  
 
   for (let userEl of document.querySelectorAll(".post-header")) {
     userEl.addEventListener("click", () => {
