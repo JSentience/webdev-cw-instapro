@@ -114,20 +114,18 @@ export const dislikePost = ({ postId, token }) => {
   });
 };
 
-export const getUserPosts = ({ userId, token }) => {
-  return fetch(`${postsHost}/user-posts/${userId}`, {
+export function getUserPosts({ token, userId }) {
+  return fetch(`${postsHost}?userId=${userId}`, {
     method: "GET",
     headers: {
       Authorization: token,
     },
-  })
-    .then((response) => {
-      if (response.status === 401) {
-        throw new Error("Нет авторизации");
-      }
-      return response.json();
-    })
-    .then((data) => {
+  }).then((response) => {
+    if (response.status === 401) {
+      throw new Error("Нет авторизации");
+    }
+    return response.json();
+  }).then((data) => {
       return data.posts;
-    });
-};
+    })
+}

@@ -1,6 +1,5 @@
 import {goToPage, posts, user} from "../index.js"
 import {POSTS_PAGE, USER_POSTS_PAGE} from "../routes.js"
-import {renderHeaderComponent} from "./header-component.js"
 import {dislikePost, likePost} from "../api.js";
 
 

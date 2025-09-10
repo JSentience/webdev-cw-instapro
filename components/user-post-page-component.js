@@ -1,34 +1,48 @@
-import {goToPage} from "../index.js";
-import {USER_POSTS_PAGE} from "../routes.js";
+import { goToPage, posts } from "../index.js"
+import { USER_POSTS_PAGE } from "../routes.js"
 
+export const renderUserPostPage = (appEl,)=>{
+  console.log("posts in user page:", posts);
+  const userPostHtml = posts.map(
+      (post) => {
+        const isLiked = post.isLiked;
+        const likesCount = post.likes.length;
+        const likesText = likesCount === 0
+          ? "Нравится: 0"
+          : `Нравится: <strong>${likesCount}</strong>`;
 
-export const renderUserPostPage = (appEl, posts)=>{
-  const userPostHtml  = posts.map((post) => {
-    return `
-    <li class="post">
-                    <div class="post-header" data-user-id="${post.user.id}">
-                        <img src="${post.user.imageUrl}" class="post-header__user-image">
-                        <p class="post-header__user-name">${post.user.name}</p>
-                    </div>
-                    <div class="post-image-container">
-                      <img class="post-image" src="${post.imageUrl}">
-                    </div>
-                    <div class="post-likes">
-                    <button data-post-id="${post.id}" data-liked="${isLiked}" class="like-button">
-                    <img src="${isLiked ? './assets/images/like-active.svg' : './assets/images/like-not-active.svg'}">
-                    </button>
-                    <p class="post-likes-text">${likesText}</p>
-                    </div>
-                    <p class="post-text">
-                      <span class="user-name">${post.user.name}</span>
-                      ${post.description}
-                    </p>
-                    <p class="post-date">
-                      ${result}
-                    </p>
-                  </li>
+        const { formatDistanceToNow } = dateFns;
+        const result = formatDistanceToNow(post.createdAt, {
+          addSuffix: true,
+          locale: dateFns.locale.ru
+        });
+        
+       return `
+      <li class="post">
+        <div class="post-header" data-user-id="${post.user.id}">
+          <img src="${post.user.imageUrl}" class="post-user-image" />
+          <p class="post-user-name">${post.user.name}</p>
+        </div>
+        <div class="post-image-container">
+          <img class="post-image" src="${post.imageUrl}" />
+        </div>
+        <p class="post-description">
+          <span class="post-author">${post.user.name}</span>
+          ${post.description}
+        </p>
+        <div class="post-footer">
+          <button class="like-button">
+            <img 
+              src="./assets/images/${post.isLiked ? "like-active.svg" : "like-not-active.svg"}" 
+              class="like-icon" 
+            />
+          </button>
+          <span class="likes-counter">${post.likes.length}</span>
+        </div>
+      </li>
     `
-  }).join('')
+      })
+    .join("");
 
   appEl.innerHTML = `
     <div class="page-container">
@@ -39,10 +53,10 @@ export const renderUserPostPage = (appEl, posts)=>{
     </div>
   `;
 
-  appEl.querySelectorAll('.post-header').forEach(userEl => {
-    userEl.addEventListener('click', () => {
-      const userId = userEl.dataset.userId;
-      goToPage(USER_POSTS_PAGE, { userId })
-    })});
+  for (let userEl of document.querySelectorAll(".post-header")) {
+    userEl.addEventListener("click", () => {
+      goToPage(USER_POSTS_PAGE, { userId: userEl.dataset.userId });
+    });
+  }
 
 };
