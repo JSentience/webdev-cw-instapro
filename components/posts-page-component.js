@@ -1,35 +1,49 @@
-import {goToPage, posts, user} from "../index.js"
-import {POSTS_PAGE, USER_POSTS_PAGE} from "../routes.js"
-import {renderHeaderComponent} from "./header-component.js"
-import {dislikePost, likePost} from "../api.js";
+// noinspection D
 
+import { dislikePost, getPosts, likePost } from '../api.js';
+import { goToPage, posts, renderApp, updatePosts, user } from '../index.js';
+import { USER_POSTS_PAGE } from '../routes.js';
 
 export function renderPostsPageComponent({ appEl }) {
   // @TODO: реализовать рендер постов из api
-	
-	const postHtml = posts.map(post => {
-    const isLiked = post.isLiked;
-    const likesCount = post.likes.length;
-    const likesText = likesCount === 0 ? "Нравится: 0" : `Нравится: <strong>${likesCount}</strong>`;
+  const postHtml = posts
+    .map((post) => {
+      const isLiked = post.isLiked;
+      const likesCount = post.likes.length;
+      const lastLiker = likesCount > 0 ? post.likes[likesCount - 1].name : null;
+      const likesText =
+        likesCount === 0
+          ? 'Нравится: 0'
+          : likesCount === 1
+            ? lastLiker
+            : `${lastLiker} и еще ${likesCount - 1}`;
 
-    const { formatDistanceToNow } = dateFns;
-    const result = formatDistanceToNow(post.createdAt, {
-      addSuffix: true,
-      locale: dateFns.locale.ru
-    });
-		// noinspection HtmlRequiredAltAttribute
-    return `
+      const { formatDistanceToNow } = dateFns;
+      const result = formatDistanceToNow(post.createdAt, {
+        addSuffix: true,
+        locale: dateFns.locale.ru,
+      });
+      // noinspection HtmlRequiredAltAttribute
+      return `
 			<li class="post">
                     <div class="post-header" data-user-id="${post.user.id}">
-                        <img src="${post.user.imageUrl}" class="post-header__user-image">
+                        <img src="${
+                          post.user.imageUrl
+                        }" class="post-header__user-image">
                         <p class="post-header__user-name">${post.user.name}</p>
                     </div>
                     <div class="post-image-container">
                       <img class="post-image" src="${post.imageUrl}">
                     </div>
                     <div class="post-likes">
-                    <button data-post-id="${post.id}" data-liked="${isLiked}" class="like-button">
-                    <img src="${isLiked ? './assets/images/like-active.svg' : './assets/images/like-not-active.svg'}">
+                    <button data-post-id="${
+                      post.id
+                    }" data-liked="${isLiked}" class="like-button">
+                    <img src="${
+                      isLiked
+                        ? './assets/images/like-active.svg'
+                        : './assets/images/like-not-active.svg'
+                    }">
                     </button>
                     <p class="post-likes-text">${likesText}</p>
                     </div>
@@ -40,9 +54,9 @@ export function renderPostsPageComponent({ appEl }) {
                     <p class="post-date">
                       ${result}
                     </p>
-                  </li>`
-	}).join("");
-  console.log("Актуальный список постов:", posts);
+                  </li>`;
+    })
+    .join('');
 
   /**
    * @TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
@@ -58,38 +72,42 @@ export function renderPostsPageComponent({ appEl }) {
 
   appEl.innerHTML = appHtml;
 
-  renderHeaderComponent({
-    element: document.querySelector(".header-container"),
-  });
-
-  for (let userEl of document.querySelectorAll(".post-header")) {
-    userEl.addEventListener("click", () => {
+  for (let userEl of document.querySelectorAll('.post-header')) {
+    userEl.addEventListener('click', () => {
       goToPage(USER_POSTS_PAGE, {
         userId: userEl.dataset.userId,
       });
     });
   }
-  for (let likeButton of document.querySelectorAll(".like-button")) {
-    likeButton.addEventListener("click", () => {
+  for (let likeButton of document.querySelectorAll('.like-button')) {
+    likeButton.addEventListener('click', () => {
       const postId = likeButton.dataset.postId;
-      const isLiked = likeButton.dataset.liked === "true";
+      const isLiked = likeButton.dataset.liked === 'true';
       const token = `Bearer ${user.token}`;
 
       if (isLiked) {
         dislikePost({ postId, token })
           .then(() => {
-            goToPage(POSTS_PAGE);
+            return getPosts({ token });
+          })
+          .then((response) => {
+            updatePosts(response.posts || response);
+            renderApp();
           })
           .catch((error) => {
-            console.error("Ошибка дизлайка:", error);
+            console.error('Ошибка дизлайка:', error);
           });
       } else {
         likePost({ postId, token })
           .then(() => {
-            goToPage(POSTS_PAGE);
+            return getPosts({ token });
+          })
+          .then((response) => {
+            updatePosts(response.posts || response);
+            renderApp();
           })
           .catch((error) => {
-            console.error("Ошибка лайка:", error);
+            console.error('Ошибка лайка:', error);
           });
       }
     });
