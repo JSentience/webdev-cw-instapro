@@ -85,6 +85,12 @@ export function renderPostsPageComponent({ appEl }) {
       const isLiked = likeButton.dataset.liked === 'true';
       const token = `Bearer ${user.token}`;
 
+      // Добавление анимации лайка
+      likeButton.classList.add('animate');
+      setTimeout(() => {
+        likeButton.classList.remove('animate');
+      }, 600);
+
       if (isLiked) {
         dislikePost({ postId, token })
           .then(() => {
