@@ -89,7 +89,7 @@ export function renderPostsPageComponent({ appEl }) {
       likeButton.classList.add('animate');
       setTimeout(() => {
         likeButton.classList.remove('animate');
-      }, 600);
+      }, 800);
 
       if (isLiked) {
         dislikePost({ postId, token })
