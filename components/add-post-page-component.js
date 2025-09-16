@@ -4,6 +4,7 @@ import { renderHeaderComponent } from "./header-component.js"
 import { renderUploadImageComponent } from "./upload-image-component.js"
 import { goToPage } from "../index.js"
 import { POSTS_PAGE } from "../routes.js"
+import { secureHtml } from "../helpers.js"
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
   let imageUrl = '';
@@ -55,7 +56,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
 
       // Вызываем API функцию добавления поста
       addPost({
-        description: description.value,
+        description: secureHtml(description.value),
         imageUrl: imageUrl,
         token: user ? `Bearer ${user.token}` : ''
       })
