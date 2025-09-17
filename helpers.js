@@ -10,3 +10,10 @@ export function getUserFromLocalStorage() {
 export function removeUserFromLocalStorage(user) {
   window.localStorage.removeItem('user');
 }
+
+
+export const secureHtml = text => {
+	const div = document.createElement('div');
+	div.textContent = text;
+	return div.innerHTML;
+};

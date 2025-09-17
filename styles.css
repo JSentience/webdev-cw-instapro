@@ -1,5 +1,35 @@
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --border-color: #e0e0e0;
+  --post-bg: #ffffff;
+  --post-image-bg: #e0e0e0;
+  --user-image-border: none;
+  --date-color: #8a8a8a;
+  --upload-bg: #ffffff;
+}
+
+.dark-theme {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --border-color: #333333;
+  --post-bg: #1e1e1e;
+  --post-image-bg: #2a2a2a;
+  --user-image-border: 1px solid #333333;
+  --date-color: #bbbbbb;
+  --upload-bg: #1e1e1e;
+}
+
 .page-container {
   padding: 0 20px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+}
+
+.page-header {
+  background-color: var(--bg-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .page-header {
@@ -26,6 +56,7 @@
 .header-button {
   padding: 0;
   border: none;
+  color: var(--text-color);
   background-color: transparent;
   font-size: 14px;
   line-height: 18px;
@@ -44,6 +75,18 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  background-color: var(--bg-color);
+}
+
+.post {
+  background-color: var(--post-bg);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.post-header__user-image {
+  border: var(--user-image-border);
 }
 
 .post-header {
@@ -63,18 +106,18 @@
 }
 
 .post-image-container {
-  margin-left: -20px;
-  margin-right: -20px;
+  margin-left: 0px;
+  margin-right: 0px;
   height: 500px;
   display: flex;
   justify-content: center;
-  background-color: #e0e0e0;
+  background-color: var(--post-image-bg);
 }
 
 .post-image {
   width: 100%;
   height: 100%;
-  max-width: 500px;
+  /* max-width: 500px; */
   object-fit: cover;
 }
 
@@ -104,7 +147,14 @@
 }
 
 .post-date {
-  color: #8a8a8a;
+  color: var(--date-color);
+}
+
+.user-name,
+.post-text,
+.logo,
+.form-title {
+  color: var(--text-color);
 }
 
 .post + .post {
@@ -138,15 +188,38 @@
 }
 
 .add-post-sign {
-  background-image: url("data:image/svg+xml,%3Csvg id='Layer_1' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 122.88 122.88'%3E%3Ctitle%3Eadd%3C/title%3E%3Cpath d='M61.44,0A61.46,61.46,0,1,1,18,18,61.25,61.25,0,0,1,61.44,0ZM88.6,56.82v9.24a4,4,0,0,1-4,4H70V84.62a4,4,0,0,1-4,4H56.82a4,4,0,0,1-4-4V70H38.26a4,4,0,0,1-4-4V56.82a4,4,0,0,1,4-4H52.84V38.26a4,4,0,0,1,4-4h9.24a4,4,0,0,1,4,4V52.84H84.62a4,4,0,0,1,4,4Zm8.83-31.37a50.92,50.92,0,1,0,14.9,36,50.78,50.78,0,0,0-14.9-36Z'/%3E%3C/svg%3E");
-  height: 30px;
+  background-image: url('./assets/images/plus.svg.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   width: 30px;
+  height: 30px;
+  color: var(--text-color);
+  cursor: pointer;
+  filter: grayscale(1) invert(0);
+  transition: filter 0.3s ease;
+}
+
+.dark-theme .add-post-sign {
+  filter: grayscale(1) invert(1);
 }
 
 .form {
   display: flex;
   flex-direction: column;
   width: 100%;
+  background-color: var(--bg-color);
+}
+
+.input,
+.textarea {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.file-upload-image-container {
+  background-color: var(--upload-bg);
 }
 
 .form-title {
@@ -195,4 +268,24 @@
   box-sizing: border-box;
   width: 100%;
   text-align: center;
+}
+
+.like-button {
+  transition: transform 0.2s ease;
+}
+
+.like-button.animate {
+  animation: pulse 0.6s ease-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
