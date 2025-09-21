@@ -2,6 +2,9 @@ import { addPost } from "../api.js"
 import { user } from "../index.js"
 import { renderHeaderComponent } from "./header-component.js"
 import { renderUploadImageComponent } from "./upload-image-component.js"
+import { goToPage } from "../index.js"
+import { POSTS_PAGE } from "../routes.js"
+import { secureHtml } from "../helpers.js"
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
   let imageUrl = '';
@@ -53,13 +56,13 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
 
       // Вызываем API функцию добавления поста
       addPost({
-        description: description.value,
+        description: secureHtml(description.value),
         imageUrl: imageUrl,
         token: user ? `Bearer ${user.token}` : ''
       })
         .then(() => {
           // После успешного добавления переходим на страницу постов
-          window.location.href = '/';
+          goToPage(POSTS_PAGE);
         })
         .catch((error) => {
           console.error("Ошибка добавления поста:", error);

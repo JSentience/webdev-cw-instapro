@@ -1,6 +1,7 @@
 // noinspection D
 
 import { dislikePost, getPosts, likePost } from '../api.js';
+import { secureHtml } from '../helpers.js';
 import { goToPage, posts, renderApp, updatePosts, user } from '../index.js';
 import { USER_POSTS_PAGE } from '../routes.js';
 
@@ -10,7 +11,7 @@ export function renderPostsPageComponent({ appEl }) {
     .map((post) => {
       const isLiked = post.isLiked;
       const likesCount = post.likes.length;
-      const lastLiker = likesCount > 0 ? post.likes[likesCount - 1].name : null;
+      const lastLiker = likesCount > 0 ? secureHtml(post.likes[likesCount - 1].name) : null;
       const likesText =
         likesCount === 0
           ? 'Нравится: 0'
@@ -48,8 +49,8 @@ export function renderPostsPageComponent({ appEl }) {
                     <p class="post-likes-text">${likesText}</p>
                     </div>
                     <p class="post-text">
-                      <span class="user-name">${post.user.name}</span>
-                      ${post.description}
+                      <span class="user-name">${secureHtml(post.user.name)}</span>
+                      ${secureHtml(post.description)}
                     </p>
                     <p class="post-date">
                       ${result}
@@ -84,6 +85,12 @@ export function renderPostsPageComponent({ appEl }) {
       const postId = likeButton.dataset.postId;
       const isLiked = likeButton.dataset.liked === 'true';
       const token = `Bearer ${user.token}`;
+
+      // Добавление анимации лайка
+      likeButton.classList.add('animate');
+      setTimeout(() => {
+        likeButton.classList.remove('animate');
+      }, 800);
 
       if (isLiked) {
         dislikePost({ postId, token })

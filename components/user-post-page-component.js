@@ -1,5 +1,6 @@
 import { dislikePost, getUserPosts, likePost } from '../api.js';
 import { posts, renderApp, updatePosts, user } from '../index.js';
+import { secureHtml } from '../helpers.js';
 
 export const renderUserPostPage = ({ appEl, userId }) => {
   const currentUserPosts = posts.filter((post) => {
@@ -59,7 +60,7 @@ export const renderUserPostPage = ({ appEl, userId }) => {
     currentUserPosts.length > 0
       ? `<div class="posts-user-header">
        <img src="${currentUserPosts[0].user.imageUrl}" class="posts-user-header__user-image">
-       <p class="posts-user-header__user-name">${currentUserPosts[0].user.name}</p>
+       <p class="posts-user-header__user-name">${secureHtml(currentUserPosts[0].user.name)}</p>
      </div>`
       : '';
 
